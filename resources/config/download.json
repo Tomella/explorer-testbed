@@ -1,1 +1,88 @@
-{}
+{
+   "map":{
+   	  "name" : "main",
+      "options":{
+      	 "maxBounds" : [[-48, 106],[-6, 159]],
+         "center":[-28, 140],
+         "minZoom":4,
+         "zoom":4
+      },
+      "position":{
+         "bounds":[
+            [-44, 117],
+            [-12, 146]
+         ],
+         "minZoom":13
+      },
+      "layers":[
+         {
+            "name":"1 Second Hydro Enforced",
+            "type":["TileLayer", "WMS"],
+            "key":"hydro",
+            "defaultLayer":true,
+            "isBaselayer":true,
+            "parameters":[
+                "http://services.ga.gov.au/gis/services/DEM_SRTM_1Second_Hydro_Enforced/MapServer/WMSServer",
+                {
+                   "layers" : "Image",
+                   "format" : "image/png",
+                   "transparent" : true,
+                   "opacity" : 1
+                }
+            ],
+            "legendUrl": "http://services.ga.gov.au/site_9/services/DEM_SRTM_1Second_Hydro_Enforced/MapServer/WmsServer?request=GetLegendGraphic&version=1.3.0&format=image/png&layer=iMAGE",
+            "addLayerControl":false,
+            "visible":true
+         },
+         {
+            "name":"Australian Topography",
+            "pseudoBaseLayer" : true,
+            "type":["TileLayer"],
+            "key":"topography",
+            "parameters":[
+                "http://services.ga.gov.au/gis/rest/services/NationalMap_Colour_Topographic_Base_World_WM/MapServer/tile/{z}/{y}/{x}",
+                {
+                   "layers" : "Image",
+                   "format" : "image/png",
+                   "transparent" : true,
+                   "opacity" : 0.7
+                }
+            ],
+            "addLayerControl":false,
+            "visible":true
+         },
+         {
+         	"description" : "placeholder for layers above the topography",
+         	"name" : "ELVIS - Foundation Spatial Data Map Layers",
+         	"type" : "LayerGroup",
+         	"layers": []
+         },
+         {
+            "name":"Australian Topography",
+            "pseudoBaseLayer" : true,
+            "type":["TileLayer", "WMS"],
+            "key":"topography",
+            "parameters":[
+                "https://elvis20161a-ga.fmecloud.com/fmedatastreaming/dev_space/GetPNG.fmw",
+                {
+                   "layers" : "public.5dem_ProjectsIndex",
+                   "format" : "image/png",
+                   "transparent" : true,
+                   "opacity" : 0.7
+                }
+            ],
+            "addLayerControl":false,
+            "visible":true
+         }
+      ],
+      "drawOptions" : {
+      	 "draw" : {
+      		"polygon" : false,
+      		"circle" : false,
+      		"marker" : false,
+      		"rectangle" : false
+      	 },
+      	 "edit" : false
+      }
+   }
+}

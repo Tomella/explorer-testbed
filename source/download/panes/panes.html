@@ -7,13 +7,10 @@
 			</div>
     		<div geo-draw data="data.map.drawOptions" line-event="elevation.plot.data" rectangle-event="bounds.drawn"></div>
     		<div class="common-legend" common-legend map="data.map"></div>
-    		<div icsm-tabs class="icsmTabs"  ng-class="{'icsmTabsClosed':!view, 'icsmTabsOpen':view}"></div>
+    		<div download-tabs class="icsmTabs"  ng-class="{'icsmTabsClosed':!view, 'icsmTabsOpen':view}"></div>
 		</div>
 		<div class="icsmPanesColRight" ng-class="{'hidden':!view, 'col-md-5':view}" style="padding-left:0; padding-right:0">
-			<div class="panesTabContentItem" ng-show="view == 'download'" icsm-view></div>
-			<div class="panesTabContentItem" ng-show="view == 'maps'" icsm-maps></div>
-			<div class="panesTabContentItem" ng-show="view == 'glossary'" icsm-glossary></div>
-			<div class="panesTabContentItem" ng-show="view == 'help'" icsm-help></div>
+			<div class="panesTabContentItem" ng-show="view == 'download'" exp-download-panel></div>
 		</div>
 	</div>
 </div>

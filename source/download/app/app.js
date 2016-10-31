@@ -7,9 +7,11 @@
       'explorer.config',
       'explorer.confirm',
 		'explorer.drag',
+		'explorer.download',
 		'explorer.enter',
       'explorer.flasher',
       'explorer.googleanalytics',
+		'explorer.header',
 		'explorer.httpdata',
 		'explorer.info',
       'explorer.legend',
@@ -23,7 +25,6 @@
 		'explorer.map.templates',
 
 		'ui.bootstrap',
-		'ui.bootstrap-slider',
       'ngAutocomplete',
 		'ngRoute',
 		'ngSanitize',
@@ -34,7 +35,11 @@
 		'geo.geosearch',
 		'geo.map',
 		'geo.maphelper',
-		'geo.measure'
+		'geo.measure',
+
+      'test.templates',
+      'download.download',
+      'download.panes'
 	])
 
 		// Set up all the service providers here.
@@ -58,7 +63,7 @@
 			function noop() { return true; }
 		}])
 
-		.controller("RootCtrl", RootCtrl);
+	.controller("rootCtrl", RootCtrl);
 
 	RootCtrl.$invoke = ['$http', 'configService', 'mapService'];
 	function RootCtrl($http, configService, mapService) {

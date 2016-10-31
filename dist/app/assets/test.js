@@ -17,14 +17,70 @@ specific language governing permissions and limitations
 under the License.
 */
 
+'use strict';
+
+(function (angular) {
+
+	'use strict';
+
+	angular.module("DownloadApp", ['explorer.config', 'explorer.confirm', 'explorer.drag', 'explorer.download', 'explorer.enter', 'explorer.flasher', 'explorer.googleanalytics', 'explorer.header', 'explorer.httpdata', 'explorer.info', 'explorer.legend', 'explorer.message', 'explorer.modal', 'explorer.persist', 'explorer.projects', 'explorer.tabs', 'explorer.version', 'exp.ui.templates', 'explorer.map.templates', 'ui.bootstrap', 'ngAutocomplete', 'ngRoute', 'ngSanitize', 'page.footer',
+
+	//'geo.baselayer.control',
+	'geo.draw', 'geo.geosearch', 'geo.map', 'geo.maphelper', 'geo.measure', 'test.templates', 'download.download', 'download.panes'])
+
+	// Set up all the service providers here.
+	.config(['configServiceProvider', 'projectsServiceProvider', 'persistServiceProvider', 'versionServiceProvider', function (configServiceProvider, projectsServiceProvider, persistServiceProvider, versionServiceProvider) {
+		configServiceProvider.location("app/resources/config/download.json");
+		versionServiceProvider.url("app/assets/package.json");
+		projectsServiceProvider.setProject("download");
+		persistServiceProvider.handler("local");
+	}]).factory("userService", [function () {
+		return {
+			login: noop,
+			hasAcceptedTerms: noop,
+			setAcceptedTerms: noop,
+			getUsername: function getUsername() {
+				return "anon";
+			}
+		};
+		function noop() {
+			return true;
+		}
+	}]).controller("rootCtrl", RootCtrl);
+
+	RootCtrl.$invoke = ['$http', 'configService', 'mapService'];
+	function RootCtrl($http, configService, mapService) {
+		var self = this;
+		mapService.getMap().then(function (map) {
+			self.map = map;
+		});
+		configService.getConfig().then(function (data) {
+			self.data = data;
+			// If its got WebGL its got everything we need.
+			try {
+				var canvas = document.createElement('canvas');
+				data.modern = !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+			} catch (e) {
+				data.modern = false;
+			}
+		});
+	}
+})(angular);
+"use strict";
+
+(function (angular) {
+  'use strict';
+
+  angular.module("download.download", []);
+})(angular);
 "use strict";
 
 (function (angular) {
 	'use strict';
 
-	angular.module("common.panes", []).directive("testPanes", ['$rootScope', '$timeout', 'mapService', function ($rootScope, $timeout, mapService) {
+	angular.module("download.panes", []).directive("downloadPanes", ['$rootScope', '$timeout', 'mapService', function ($rootScope, $timeout, mapService) {
 		return {
-			templateUrl: "panes/panes.html",
+			templateUrl: "test/download/panes/panes.html",
 			transclude: true,
 			replace: true,
 			scope: {
@@ -64,18 +120,18 @@ under the License.
 				}, 50);
 			}]
 		};
-	}]).directive("testTabs", [function () {
+	}]).directive("downloadTabs", [function () {
 		return {
-			templateUrl: "panes/tabs.html",
-			require: "^testPanes"
+			templateUrl: "test/download/panes/tabs.html",
+			require: "^downloadPanes"
 		};
-	}]).controller("PaneCtrl", PaneCtrl).factory("paneService", PaneService);
+	}]).controller("downloadPaneCtrl", PaneCtrl).factory("downloadPaneService", PaneService);
 
-	PaneCtrl.$inject = ["paneService"];
-	function PaneCtrl(paneService) {
+	PaneCtrl.$inject = ["downloadPaneService"];
+	function PaneCtrl(downloadPaneService) {
 		var _this = this;
 
-		paneService.data().then(function (data) {
+		downloadPaneService.data().then(function (data) {
 			_this.data = data;
 		});
 	}
@@ -91,54 +147,5 @@ under the License.
 		};
 	}
 })(angular);
-'use strict';
-
-(function (angular) {
-
-	'use strict';
-
-	angular.module("DownloadApp", ['explorer.config', 'explorer.confirm', 'explorer.drag', 'explorer.enter', 'explorer.flasher', 'explorer.googleanalytics', 'explorer.httpdata', 'explorer.info', 'explorer.legend', 'explorer.message', 'explorer.modal', 'explorer.persist', 'explorer.projects', 'explorer.tabs', 'explorer.version', 'exp.ui.templates', 'explorer.map.templates', 'ui.bootstrap', 'ui.bootstrap-slider', 'ngAutocomplete', 'ngRoute', 'ngSanitize', 'page.footer',
-
-	//'geo.baselayer.control',
-	'geo.draw', 'geo.geosearch', 'geo.map', 'geo.maphelper', 'geo.measure'])
-
-	// Set up all the service providers here.
-	.config(['configServiceProvider', 'projectsServiceProvider', 'persistServiceProvider', 'versionServiceProvider', function (configServiceProvider, projectsServiceProvider, persistServiceProvider, versionServiceProvider) {
-		configServiceProvider.location("app/resources/config/download.json");
-		versionServiceProvider.url("app/assets/package.json");
-		projectsServiceProvider.setProject("download");
-		persistServiceProvider.handler("local");
-	}]).factory("userService", [function () {
-		return {
-			login: noop,
-			hasAcceptedTerms: noop,
-			setAcceptedTerms: noop,
-			getUsername: function getUsername() {
-				return "anon";
-			}
-		};
-		function noop() {
-			return true;
-		}
-	}]).controller("RootCtrl", RootCtrl);
-
-	RootCtrl.$invoke = ['$http', 'configService', 'mapService'];
-	function RootCtrl($http, configService, mapService) {
-		var self = this;
-		mapService.getMap().then(function (map) {
-			self.map = map;
-		});
-		configService.getConfig().then(function (data) {
-			self.data = data;
-			// If its got WebGL its got everything we need.
-			try {
-				var canvas = document.createElement('canvas');
-				data.modern = !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
-			} catch (e) {
-				data.modern = false;
-			}
-		});
-	}
-})(angular);
-angular.module("test.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("test/panes/panes.html","<div class=\"container contentContainer\">\r\n	<div class=\"row icsmPanesRow\" >\r\n		<div class=\"icsmPanesCol\" ng-class=\"{\'col-md-12\':!view, \'col-md-7\':view}\" style=\"padding-right:0\">\r\n			<div class=\"expToolbar row noPrint\" icsm-toolbar-row map=\"root.map\" title=\"\'fred\'\"></div>\r\n			<div class=\"panesMapContainer\" geo-map configuration=\"data.map\">\r\n			    <geo-extent></geo-extent>\r\n			</div>\r\n    		<div geo-draw data=\"data.map.drawOptions\" line-event=\"elevation.plot.data\" rectangle-event=\"bounds.drawn\"></div>\r\n    		<div class=\"common-legend\" common-legend map=\"data.map\"></div>\r\n    		<div icsm-tabs class=\"icsmTabs\"  ng-class=\"{\'icsmTabsClosed\':!view, \'icsmTabsOpen\':view}\"></div>\r\n		</div>\r\n		<div class=\"icsmPanesColRight\" ng-class=\"{\'hidden\':!view, \'col-md-5\':view}\" style=\"padding-left:0; padding-right:0\">\r\n			<div class=\"panesTabContentItem\" ng-show=\"view == \'download\'\" icsm-view></div>\r\n			<div class=\"panesTabContentItem\" ng-show=\"view == \'maps\'\" icsm-maps></div>\r\n			<div class=\"panesTabContentItem\" ng-show=\"view == \'glossary\'\" icsm-glossary></div>\r\n			<div class=\"panesTabContentItem\" ng-show=\"view == \'help\'\" icsm-help></div>\r\n		</div>\r\n	</div>\r\n</div>");
-$templateCache.put("test/panes/tabs.html","<!-- tabs go here -->\r\n<div id=\"panesTabsContainer\" class=\"paneRotateTabs\" style=\"opacity:0.9\" ng-style=\"{\'right\' : contentLeft +\'px\'}\">\r\n\r\n	<div class=\"paneTabItem\" ng-class=\"{\'bold\': view == \'download\'}\" ng-click=\"setView(\'download\')\">\r\n		<button class=\"undecorated\">Download</button>\r\n	</div>\r\n	<!-- \r\n	<div class=\"paneTabItem\" ng-class=\"{\'bold\': view == \'search\'}\" ng-click=\"setView(\'search\')\">\r\n		<button class=\"undecorated\">Search</button>\r\n	</div>\r\n	<div class=\"paneTabItem\" ng-class=\"{\'bold\': view == \'maps\'}\" ng-click=\"setView(\'maps\')\">\r\n		<button class=\"undecorated\">Layers</button>\r\n	</div>\r\n	-->\r\n	<div class=\"paneTabItem\" ng-class=\"{\'bold\': view == \'glossary\'}\" ng-click=\"setView(\'glossary\')\">\r\n		<button class=\"undecorated\">Glossary</button>\r\n	</div>\r\n	<div class=\"paneTabItem\" ng-class=\"{\'bold\': view == \'help\'}\" ng-click=\"setView(\'help\')\">\r\n		<button class=\"undecorated\">Help</button>\r\n	</div>\r\n</div>\r\n");}]);
+angular.module("test.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("test/download/panes/panes.html","<div class=\"container contentContainer\">\r\n	<div class=\"row icsmPanesRow\" >\r\n		<div class=\"icsmPanesCol\" ng-class=\"{\'col-md-12\':!view, \'col-md-7\':view}\" style=\"padding-right:0\">\r\n			<div class=\"expToolbar row noPrint\" icsm-toolbar-row map=\"root.map\" title=\"\'fred\'\"></div>\r\n			<div class=\"panesMapContainer\" geo-map configuration=\"data.map\">\r\n			    <geo-extent></geo-extent>\r\n			</div>\r\n    		<div geo-draw data=\"data.map.drawOptions\" line-event=\"elevation.plot.data\" rectangle-event=\"bounds.drawn\"></div>\r\n    		<div class=\"common-legend\" common-legend map=\"data.map\"></div>\r\n    		<div download-tabs class=\"icsmTabs\"  ng-class=\"{\'icsmTabsClosed\':!view, \'icsmTabsOpen\':view}\"></div>\r\n		</div>\r\n		<div class=\"icsmPanesColRight\" ng-class=\"{\'hidden\':!view, \'col-md-5\':view}\" style=\"padding-left:0; padding-right:0\">\r\n			<div class=\"panesTabContentItem\" ng-show=\"view == \'download\'\" exp-download-panel></div>\r\n		</div>\r\n	</div>\r\n</div>");
+$templateCache.put("test/download/panes/tabs.html","<!-- tabs go here -->\r\n<div id=\"panesTabsContainer\" class=\"paneRotateTabs\" style=\"opacity:0.9\" ng-style=\"{\'right\' : contentLeft +\'px\'}\">\r\n\r\n	<div class=\"paneTabItem\" ng-class=\"{\'bold\': view == \'download\'}\" ng-click=\"setView(\'download\')\">\r\n		<button class=\"undecorated\">Download</button>\r\n	</div>\r\n</div>\r\n");}]);

@@ -2,11 +2,11 @@
 (function(angular) {
 'use strict';
 
-angular.module("common.panes", [])
+angular.module("download.panes", [])
 
-.directive("testPanes", ['$rootScope', '$timeout', 'mapService', function($rootScope, $timeout, mapService) {
+.directive("downloadPanes", ['$rootScope', '$timeout', 'mapService', function($rootScope, $timeout, mapService) {
 	return {
-		templateUrl : "panes/panes.html",
+		templateUrl : "test/download/panes/panes.html",
 		transclude : true,
       replace: true,
 		scope : {
@@ -48,19 +48,19 @@ angular.module("common.panes", [])
 	};
 }])
 
-.directive("testTabs", [function() {
+.directive("downloadTabs", [function() {
 	return {
-		templateUrl : "panes/tabs.html",
-		require : "^testPanes"
+		templateUrl : "test/download/panes/tabs.html",
+		require : "^downloadPanes"
 	};
 }])
 
-.controller("PaneCtrl", PaneCtrl)
-.factory("paneService", PaneService);
+.controller("downloadPaneCtrl", PaneCtrl)
+.factory("downloadPaneService", PaneService);
 
-PaneCtrl.$inject = ["paneService"];
-function PaneCtrl(paneService) {
-	paneService.data().then(data => {
+PaneCtrl.$inject = ["downloadPaneService"];
+function PaneCtrl(downloadPaneService) {
+	downloadPaneService.data().then(data => {
 		this.data = data;
 	});
 }
