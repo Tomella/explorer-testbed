@@ -7,7 +7,6 @@
       'explorer.config',
       'explorer.confirm',
 		'explorer.drag',
-		'explorer.download',
 		'explorer.enter',
       'explorer.flasher',
       'explorer.googleanalytics',
@@ -38,8 +37,9 @@
 		'geo.measure',
 
       'test.templates',
-      'download.download',
-      'download.panes'
+
+      'download.panes',
+      'ed.download'
 	])
 
 		// Set up all the service providers here.
