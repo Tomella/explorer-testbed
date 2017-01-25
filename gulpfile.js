@@ -45,12 +45,23 @@ gulp.task('views', function () {
 
 //Concatenate & Minify JS
 gulp.task('scripts', function() {
-   return gulp.src(directories.source + '/**/*.js')
+   return gulp.src(directories.source + '/download/**/*.js')
       .pipe(babel({
             presets: ['es2015']
       }))
 	   .pipe(addStream.obj(prepareTemplates()))
       .pipe(concat('test.js'))
+      .pipe(header(fs.readFileSync(directories.source + '/licence.txt', 'utf8')))
+      .pipe(gulp.dest(directories.assets));
+});
+
+//Concatenate & Minify JS
+gulp.task('elevation', function() {
+   return gulp.src(directories.source + '/elevation/**/*.js')
+      .pipe(babel({
+            presets: ['es2015']
+      }))
+      .pipe(concat('elevation.js'))
       .pipe(header(fs.readFileSync(directories.source + '/licence.txt', 'utf8')))
       .pipe(gulp.dest(directories.assets));
 });
@@ -66,7 +77,8 @@ gulp.task('squash', function() {
 gulp.task('watch', function() {
 	// We watch both JS and HTML files.
     gulp.watch(directories.source + '/**/*(*.js|*.html)', ['lint']);
-    gulp.watch(directories.source + '/**/*(*.js|*.html)', ['scripts']);
+    gulp.watch(directories.source + '/download/**/*(*.js|*.html)', ['scripts']);
+    gulp.watch(directories.source + '/elevation/**/*(*.js|*.html)', ['elevation']);
     gulp.watch(directories.source + '/**/*.css', ['concatCss']);
     gulp.watch(directories.assets + '/test.js', ['squash']);
     gulp.watch(directories.views +  '/*', ['views']);

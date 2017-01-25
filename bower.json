@@ -19,6 +19,7 @@
     "ga-explorer-map-components": "https://github.com/Tomella/explorer-map-components.git#0.0.6",
     "explorer-ui-components": "https://github.com/Tomella/explorer-ui-components.git#master",
     "explorer-download": "https://github.com/Tomella/explorer-download.git",
+    "explorer-3d": "https://github.com/Tomella/explorer-3d.git",
     "angular": "~1.4.12",
     "components-font-awesome": "~4.5.0",
     "bg-splitter": "*",
