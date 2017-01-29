@@ -3,7 +3,12 @@ function showGeoJson() {
    var bbox = [140, -20, 148, -10]; // Melb [144.3, -38.7, 145.3, -37.7]; // mt kos.[147.8, -37, 148.8, -36];
    var resx = 600;
    var resy = 600;
-   var area = new Elevation.CswGeoJsonLoader("http://services.ga.gov.au/site_9/services/DEM_SRTM_1Second_over_Bathymetry_Topography/MapServer/WCSServer?SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage&coverage=1&CRS=EPSG:4326&BBOX=${bbox}&FORMAT=GeoTIFF&RESX=${resx}&RESY=${resy}&RESPONSE_CRS=EPSG:4326&HEIGHT=${height}&WIDTH=${width}", bbox, resx);
+   var area = new Elevation.CswGeoJsonLoader({
+      template: "http://services.ga.gov.au/site_9/services/DEM_SRTM_1Second_over_Bathymetry_Topography/MapServer/WCSServer?SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage&coverage=1&CRS=EPSG:4326&BBOX=${bbox}&FORMAT=GeoTIFF&RESX=${resx}&RESY=${resy}&RESPONSE_CRS=EPSG:4326&HEIGHT=${height}&WIDTH=${width}",
+      bbox: bbox,
+      resolutionX: resx
+   });
+   
    var state = {};
    var element = document.getElementById("target");
 

@@ -1,0 +1,5 @@
+#!/bin/bash
+cd /home/ec2-user/explorer-testbed
+git pull
+bower update
+sudo cp -rf dist/* /var/www/html/cossap

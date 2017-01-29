@@ -3,7 +3,11 @@ function showPoints() {
    var bbox = [142, -21, 148, -15]; // Melb [144.3, -38.7, 145.3, -37.7]; // mt kos.[147.8, -37, 148.8, -36];
    var resx = 500;
    var resy = 500;
-   var area = new Elevation.CswXyzLoader("http://services.ga.gov.au/site_9/services/DEM_SRTM_1Second_over_Bathymetry_Topography/MapServer/WCSServer?SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage&coverage=1&CRS=EPSG:4326&BBOX=${bbox}&FORMAT=GeoTIFF&RESX=${resx}&RESY=${resy}&RESPONSE_CRS=EPSG:4326&HEIGHT=${height}&WIDTH=${width}", bbox, resx);
+   var area = new Elevation.CswXyzLoader({
+      template: "http://services.ga.gov.au/site_9/services/DEM_SRTM_1Second_over_Bathymetry_Topography/MapServer/WCSServer?SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage&coverage=1&CRS=EPSG:4326&BBOX=${bbox}&FORMAT=GeoTIFF&RESX=${resx}&RESY=${resy}&RESPONSE_CRS=EPSG:4326&HEIGHT=${height}&WIDTH=${width}",
+      bbox: bbox,
+      resolutionX: resx
+   });
    var state = {};
    var element = document.getElementById("target");
 
@@ -51,36 +55,36 @@ function showPoints() {
       state.renderer.setClearColor(0x222222, 1.0);
       element.appendChild(state.renderer.domElement);
 
-		let scatterPlot = state.container = new THREE.Object3D();
-		state.scene.add(scatterPlot);
+      let scatterPlot = state.container = new THREE.Object3D();
+      state.scene.add(scatterPlot);
 
-		var pointGeo = new THREE.Geometry();
-      res.forEach( (point, i) => {
-			var x = point.x;
-			var y = point.y;
-			var z = point.z;
+      var pointGeo = new THREE.Geometry();
+      res.forEach((point, i) => {
+         var x = point.x;
+         var y = point.y;
+         var z = point.z;
          var p = new THREE.Vector3((x - midX) * 1500, (y - midY) * 1500, (z - min) / 2 - 550);
-			pointGeo.vertices.push(p);
-			pointGeo.colors.push(new THREE.Color().setRGB(
-					hexToRgb(colour(""+i)).r / 255, hexToRgb(colour(""+i)).g / 255,
-					hexToRgb(colour(""+i)).b / 255));
+         pointGeo.vertices.push(p);
+         pointGeo.colors.push(new THREE.Color().setRGB(
+            hexToRgb(colour("" + i)).r / 255, hexToRgb(colour("" + i)).g / 255,
+            hexToRgb(colour("" + i)).b / 255));
 
       });
-		if(res.length) {
-			pointGeo.computeBoundingSphere();
-			if(pointGeo.boundingSphere.radius < 5) {
-				console.log("Overriding bounding sphere radius" + pointGeo.boundingSphere.radius);
-				pointGeo.boundingSphere.radius = 5;
-			}
-		}
+      if (res.length) {
+         pointGeo.computeBoundingSphere();
+         if (pointGeo.boundingSphere.radius < 5) {
+            console.log("Overriding bounding sphere radius" + pointGeo.boundingSphere.radius);
+            pointGeo.boundingSphere.radius = 5;
+         }
+      }
 
       var mat = new THREE.PointsMaterial({
-			vertexColors : THREE.VertexColors,
-			size : 1
-		});
+         vertexColors: THREE.VertexColors,
+         size: 1
+      });
 
-		var points = new THREE.Points(pointGeo, mat);
-		scatterPlot.add(points);
+      var points = new THREE.Points(pointGeo, mat);
+      scatterPlot.add(points);
 
       // Make it flat
       scatterPlot.rotation.x = -Math.PI / 2;
